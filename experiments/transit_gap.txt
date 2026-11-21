@@ -1,0 +1,56 @@
+40,825 real stops in scored tracts from 17 feeds; 93.0% have an Overture stop within 50 m
+                     size   mean
+feed                            
+houston_metro        8797  0.843
+phoenix_valleymetro  7941  0.920
+dallas_dart          6977  0.936
+sanantonio_via       6096  0.939
+austin_capmetro      2336  0.998
+okc_embark           1640  1.000
+fortworth_trinity    1594  1.000
+tulsa_mtta           1191  1.000
+laredo_elmetro       1073  1.000
+lubbock_citibus       652  1.000
+brownsville_metro     580  1.000
+butte_bline           483  1.000
+mcallen_metro         372  1.000
+redding_raba          309  1.000
+tucson_pima_rta       302  1.000
+yubasutter            289  1.000
+roseville             193  1.000
+
+-- by housing_transport_q
+                     tracts  real_stops  missing_share  tracts_all_missing
+housing_transport_q                                                       
+Q1 least              851.0      7415.0          0.079               0.015
+Q2                    850.0      8954.0          0.080               0.012
+Q3                    850.0     11030.0          0.069               0.006
+Q4 most               851.0     13201.0          0.059               0.004
+
+-- by svi_q
+          tracts  real_stops  missing_share  tracts_all_missing
+svi_q                                                          
+Q1 least   851.0      7696.0          0.073               0.008
+Q2         851.0      9067.0          0.065               0.011
+Q3         850.0     10680.0          0.079               0.011
+Q4 most    850.0     13157.0          0.063               0.007
+
+-- by ur_class
+          tracts  real_stops  missing_share  tracts_all_missing
+ur_class                                                       
+Rural       44.0       197.0          0.061               0.023
+Urban     3384.0     40600.0          0.070               0.009
+
+-- by tribal_any
+            tracts  real_stops  missing_share  tracts_all_missing
+tribal_any                                                       
+False       3302.0     39474.0          0.072               0.009
+True         135.0      1351.0          0.005               0.000
+
+-- by region
+                  tracts  real_stops  missing_share  tracts_all_missing
+region                                                                 
+eastern-ok         320.0      2831.0          0.000               0.000
+maricopa-az        792.0      8243.0          0.077               0.005
+northern-ca        155.0      1274.0          0.000               0.000
+south-central-tx  2170.0     28477.0          0.077               0.012

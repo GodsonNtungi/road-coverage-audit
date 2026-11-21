@@ -1,0 +1,7 @@
+ band_m              layer  rural  urban  tribal  non_tribal  wildfire_high  wildfire_low  median_tiger_exits
+     20 escape-route layer  0.185  0.040   0.136       0.060          0.116         0.042                26.0
+     20        with tracks  0.082  0.033   0.090       0.037          0.056         0.037                26.0
+     30 escape-route layer  0.194  0.044   0.145       0.064          0.122         0.048                26.0
+     30        with tracks  0.089  0.037   0.098       0.041          0.061         0.042                26.0
+     50 escape-route layer  0.206  0.049   0.151       0.071          0.132         0.053                27.0
+     50        with tracks  0.095  0.041   0.101       0.046          0.067         0.047                27.0

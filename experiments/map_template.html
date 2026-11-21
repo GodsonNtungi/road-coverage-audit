@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overture Coverage Gaps</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --surface-0: #f4f3f0; --surface-1: #fcfcfb; --border: #e2e1dc;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #7a7973;
+  --s0: #e6effa; --s1: #9ec5f4; --s2: #6da7ec; --s3: #3987e5; --s4: #256abf; --s5: #184f95; --s6: #0d366b;
+  --undefined: #d6d5d0; --accent: #2a78d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-0: #121211; --surface-1: #1a1a19; --border: #33332f;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+    --s0: #1d2633; --s1: #184f95; --s2: #1c5cab; --s3: #2a78d6; --s4: #5598e7; --s5: #86b6ef; --s6: #cde2fb;
+    --undefined: #45453f; --accent: #3987e5;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #121211; --surface-1: #1a1a19; --border: #33332f;
+  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+  --s0: #1d2633; --s1: #184f95; --s2: #1c5cab; --s3: #2a78d6; --s4: #5598e7; --s5: #86b6ef; --s6: #cde2fb;
+  --undefined: #45453f; --accent: #3987e5;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface-0); color: var(--text-primary);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; font-weight: 650; }
+.sub { color: var(--text-secondary); margin: 0 0 16px; max-width: 70ch; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface-1); }
+.seg button { border: 0; background: none; color: var(--text-secondary); padding: 7px 12px; font: inherit; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+select { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface-1); color: var(--text-primary); }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; }
+#map { height: 62vh; min-height: 380px; border-radius: 12px; }
+.leaflet-container { background: var(--surface-1); font: inherit; }
+.stats { display: flex; flex-wrap: wrap; gap: 24px; padding: 12px 16px; }
+.stat b { display: block; font-size: 20px; font-weight: 650; }
+.stat span { color: var(--text-secondary); font-size: 12px; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 10px 16px; border-top: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 12px; }
+.ramp { display: flex; align-items: flex-end; gap: 2px; }
+.ramp div { width: 34px; }
+.ramp i { display: block; height: 10px; border-radius: 3px; }
+.ramp small { display: block; text-align: left; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.swatch { display: inline-block; width: 14px; height: 10px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+.tip { font-size: 12px; line-height: 1.5; }
+.tip b { font-size: 13px; }
+.tip td { padding: 0 8px 0 0; }
+.tip td + td { text-align: right; font-variant-numeric: tabular-nums; }
+.leaflet-tooltip { background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgb(0 0 0 / .15); border-radius: 8px; }
+h2 { font-size: 16px; margin: 28px 0 8px; }
+table.list { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.list th, table.list td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--border); }
+table.list th { color: var(--text-secondary); font-weight: 500; font-size: 12px; }
+table.list td.n, table.list th.n { text-align: right; }
+table.list tbody tr { cursor: pointer; }
+table.list tbody tr:hover { background: var(--surface-0); }
+.wrap { overflow-x: auto; }
+.note { color: var(--text-muted); font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Where Overture Maps under-covers U.S. census tracts</h1>
+  <p class="sub">Each tract is coloured by how much of the official record (Census roads, Microsoft buildings,
+    government facility lists, Census business counts) is missing from Overture. 0 = nothing missing, 1 = everything missing.</p>
+
+  <div class="controls">
+    <select id="region" aria-label="Region"></select>
+    <div class="seg" role="group" aria-label="Layer" id="layers">
+      <button data-k="coverage_gap_score" aria-pressed="true">Overall</button>
+      <button data-k="transport_gap">Roads</button>
+      <button data-k="building_gap">Buildings</button>
+      <button data-k="poi_gap">Facilities &amp; places</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="map"></div>
+    <div class="stats" id="stats"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <h2 id="listTitle">Worst-covered tracts</h2>
+  <div class="card wrap">
+    <table class="list">
+      <thead><tr><th>Tract</th><th class="n">Gap</th><th class="n">Roads</th><th class="n">Buildings</th>
+        <th class="n">Places</th><th class="n">People</th><th class="n">Vulnerability</th><th>Tribal area</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <p class="note">Click a row to zoom to the tract. Grey tracts have nothing official to compare against for this layer
+    (for example no Census highway), so they carry no gap. Vulnerability is the CDC Social Vulnerability Index percentile.</p>
+</main>
+<script>
+const DATA = /*DATA*/null;
+const REGIONS = /*REGIONS*/null;
+const BREAKS = [0.005, 0.02, 0.05, 0.1, 0.2, 0.35];
+const LABELS = ["0", "0.005", "0.02", "0.05", "0.1", "0.2", "0.35+"];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let PAL;  // read the theme's colours once per redraw, not once per tract
+const palette = () => (PAL = { ramp: [0,1,2,3,4,5,6].map(i => css(`--s${i}`)), undef: css("--undefined"),
+                               edge: css("--surface-1"), hover: css("--text-primary") });
+const ramp = () => PAL.ramp;
+const bin = v => { let i = 0; while (i < BREAKS.length && v >= BREAKS[i]) i++; return i; };
+const fmt = v => v == null ? "–" : v.toFixed(3);
+const pct = v => v == null ? "–" : Math.round(v * 100) + "th";
+const num = v => v == null ? "–" : Math.round(v).toLocaleString();
+const NAMES = { coverage_gap_score: "Overall gap", transport_gap: "Road gap", building_gap: "Building gap", poi_gap: "Facilities & places gap" };
+
+let layerKey = "coverage_gap_score", region = Object.keys(REGIONS)[0];
+const map = L.map("map", { preferCanvas: true, zoomSnap: 0.25, attributionControl: false });
+
+const byRegion = {};
+for (const f of DATA.features) (byRegion[f.properties.region] ||= []).push(f);
+
+function style(f) {
+  const v = f.properties[layerKey];
+  return { fillColor: v == null ? PAL.undef : PAL.ramp[bin(v)], fillOpacity: 0.85, color: PAL.edge, weight: 0.4 };
+}
+function tip(p) {
+  return `<div class="tip"><b>Tract ${p.GEOID}</b><br>${p.aiannh_name ? p.aiannh_name + "<br>" : ""}
+    <table><tr><td>Overall gap</td><td><b>${fmt(p.coverage_gap_score)}</b></td></tr>
+    <tr><td>Roads</td><td>${fmt(p.transport_gap)}</td></tr><tr><td>Buildings</td><td>${fmt(p.building_gap)}</td></tr>
+    <tr><td>Facilities &amp; places</td><td>${fmt(p.poi_gap)}</td></tr>
+    <tr><td>People</td><td>${num(p.pop_total)}</td></tr><tr><td>Vulnerability</td><td>${pct(p.svi_overall)}</td></tr>
+    <tr><td>${p.ur_class || ""}</td><td>${p.tribal_any ? "tribal area" : ""}</td></tr></table></div>`;
+}
+let geo;
+function draw(fit) {
+  if (geo) map.removeLayer(geo);
+  geo = L.geoJSON({ type: "FeatureCollection", features: byRegion[region] }, {
+    style, onEachFeature: (f, l) => {
+      l.bindTooltip(() => tip(f.properties), { sticky: true, direction: "top", offset: [0, -8] });
+      l.on("mouseover", () => l.setStyle({ weight: 2, color: PAL.hover }));
+      l.on("mouseout", () => geo.resetStyle(l));
+    } }).addTo(map);
+  if (fit) map.fitBounds(geo.getBounds(), { padding: [12, 12] });
+  stats(); legend(); list();
+}
+function stats() {
+  const fs = byRegion[region].map(f => f.properties).filter(p => p[layerKey] != null);
+  const mean = fs.reduce((a, p) => a + p[layerKey], 0) / fs.length;
+  const bad = fs.filter(p => p[layerKey] >= 0.2);
+  const people = bad.reduce((a, p) => a + (p.pop_total || 0), 0);
+  document.getElementById("stats").innerHTML =
+    `<div class="stat"><b>${fs.length.toLocaleString()}</b><span>tracts scored on this layer</span></div>
+     <div class="stat"><b>${mean.toFixed(3)}</b><span>average gap</span></div>
+     <div class="stat"><b>${bad.length.toLocaleString()}</b><span>tracts at 0.2 or worse</span></div>
+     <div class="stat"><b>${Math.round(people).toLocaleString()}</b><span>people living in them</span></div>`;
+}
+function legend() {
+  const r = ramp();
+  document.getElementById("legend").innerHTML = `<span>${NAMES[layerKey]}</span>
+    <div class="ramp">${r.map((c, i) => `<div><i style="background:${c}"></i><small>${LABELS[i]}</small></div>`).join("")}</div>
+    <span><i class="swatch" style="background:${PAL.undef}"></i>nothing to compare</span>`;
+}
+function list() {
+  const fs = byRegion[region].filter(f => f.properties[layerKey] != null)
+    .sort((a, b) => b.properties[layerKey] - a.properties[layerKey]).slice(0, 25);
+  document.getElementById("listTitle").textContent = `25 worst tracts for ${NAMES[layerKey].toLowerCase()}, ${REGIONS[region]}`;
+  const tb = document.getElementById("rows");
+  tb.innerHTML = fs.map((f, i) => { const p = f.properties; return `<tr data-i="${i}"><td>${p.GEOID}</td>
+    <td class="n"><b>${fmt(p[layerKey])}</b></td><td class="n">${fmt(p.transport_gap)}</td><td class="n">${fmt(p.building_gap)}</td>
+    <td class="n">${fmt(p.poi_gap)}</td><td class="n">${num(p.pop_total)}</td><td class="n">${pct(p.svi_overall)}</td>
+    <td>${p.aiannh_name || ""}</td></tr>`; }).join("");
+  tb.onclick = e => { const tr = e.target.closest("tr"); if (!tr) return;
+    const f = fs[+tr.dataset.i]; map.fitBounds(L.geoJSON(f).getBounds(), { maxZoom: 13, padding: [40, 40] });
+    window.scrollTo({ top: 0, behavior: "smooth" }); };
+}
+const sel = document.getElementById("region");
+sel.innerHTML = Object.entries(REGIONS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+sel.onchange = () => { region = sel.value; draw(true); };
+document.getElementById("layers").onclick = e => {
+  const b = e.target.closest("button"); if (!b) return;
+  layerKey = b.dataset.k;
+  document.querySelectorAll("#layers button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  geo.setStyle(style); stats(); legend(); list();
+};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { palette(); geo.setStyle(style); legend(); });
+palette();
+draw(true);
+</script>
+</body>
+</html>

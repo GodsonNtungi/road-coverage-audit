@@ -1,0 +1,84 @@
+
+== share of real ways out not shown, by wildfire
+          tracts  drivable classes (the challenge's escape-route layer)  + unpaved 'track' roads  + track and service roads
+wildfire                                                                                                                   
+low         2333                                                  0.048                    0.042                      0.001
+mid-low     2345                                                  0.047                    0.038                      0.000
+mid-high    2342                                                  0.069                    0.044                      0.001
+high        2345                                                  0.122                    0.061                      0.002
+
+== share of real ways out not shown, by region x wildfire
+                           tracts  drivable classes (the challenge's escape-route layer)  + unpaved 'track' roads  + track and service roads
+region           wildfire                                                                                                                   
+eastern-ok       low          298                                                  0.060                    0.058                      0.000
+                 mid-low      298                                                  0.079                    0.070                      0.000
+                 mid-high     298                                                  0.142                    0.110                      0.002
+                 high         298                                                  0.195                    0.138                      0.007
+maricopa-az      low          399                                                  0.106                    0.084                      0.003
+                 mid-low      398                                                  0.084                    0.061                      0.001
+                 mid-high     398                                                  0.076                    0.036                      0.000
+                 high         398                                                  0.136                    0.032                      0.000
+northern-ca      low          148                                                  0.040                    0.033                      0.000
+                 mid-low      148                                                  0.040                    0.029                      0.000
+                 mid-high     146                                                  0.114                    0.033                      0.002
+                 high         148                                                  0.286                    0.044                      0.002
+south-central-tx low         1488                                                  0.030                    0.029                      0.000
+                 mid-low     1501                                                  0.031                    0.026                      0.000
+                 mid-high    1500                                                  0.048                    0.034                      0.001
+                 high        1501                                                  0.088                    0.055                      0.002
+
+== share of real ways out not shown, by ur_class x wildfire
+                   tracts  drivable classes (the challenge's escape-route layer)  + unpaved 'track' roads  + track and service roads
+ur_class wildfire                                                                                                                   
+Rural    low           27                                                  0.415                    0.097                      0.042
+         mid-low       96                                                  0.214                    0.074                      0.008
+         mid-high     416                                                  0.210                    0.104                      0.007
+         high        1173                                                  0.182                    0.085                      0.003
+Urban    low         2298                                                  0.043                    0.042                      0.000
+         mid-low     2245                                                  0.039                    0.036                      0.000
+         mid-high    1922                                                  0.038                    0.031                      0.000
+         high        1164                                                  0.060                    0.036                      0.001
+
+== share of real ways out not shown, by tribal_any
+            tracts  drivable classes (the challenge's escape-route layer)  + unpaved 'track' roads  + track and service roads
+tribal_any                                                                                                                   
+False         8507                                                  0.064                    0.041                      0.001
+True           858                                                  0.145                    0.098                      0.004
+
+== share of real ways out not shown, by region x tribal_any
+                             tracts  drivable classes (the challenge's escape-route layer)  + unpaved 'track' roads  + track and service roads
+region           tribal_any                                                                                                                   
+eastern-ok       False          387                                                  0.089                    0.077                      0.000
+                 True           805                                                  0.133                    0.102                      0.003
+maricopa-az      False         1556                                                  0.095                    0.054                      0.001
+                 True            37                                                  0.344                    0.041                      0.015
+northern-ca      False          575                                                  0.117                    0.035                      0.001
+                 True            15                                                  0.252                    0.023                      0.000
+south-central-tx False         5989                                                  0.049                    0.036                      0.001
+                 True             1                                                  0.085                    0.000                      0.000
+
+== share of real ways out not shown, by svi_high
+          tracts  drivable classes (the challenge's escape-route layer)  + unpaved 'track' roads  + track and service roads
+svi_high                                                                                                                   
+False       6141                                                  0.071                    0.044                      0.001
+True        3224                                                  0.073                    0.050                      0.002
+
+== high-wildfire tracts losing the most ways out in the escape-route layer
+      GEOID           region  exits_tiger  exits_overture  exits_overture_track  pop_total ur_class                                 aiannh_name
+04005980200      maricopa-az            9               0                    17          0      NaN                                         NaN
+06055201800      northern-ca           24               2                    37       1781    Rural                                         NaN
+48443950100 south-central-tx           75               7                    79        760    Rural                                         NaN
+48383950100 south-central-tx          187              20                   144       3385    Rural                                         NaN
+06049000200      northern-ca          177              33                   169       1511    Rural                           Lookout Rancheria
+48033950100 south-central-tx          182              34                   114        631    Rural                                         NaN
+40031002401       eastern-ok           87              18                    51        295    Rural Kiowa-Comanche-Apache-Fort Sill Apache OTSA
+48173950100 south-central-tx          143              30                    93       1116    Rural                                         NaN
+06063000100      northern-ca           38               8                    64       5271    Rural                                         NaN
+48413950300 south-central-tx          144              32                   140       2451    Rural                                         NaN
+48235950100 south-central-tx          184              41                   153       1513    Rural                                         NaN
+06035040200      northern-ca          155              38                   137       2459    Rural                                         NaN
+48431950100 south-central-tx          166              42                   105       1372    Rural                                         NaN
+04009940500      maricopa-az           47              12                    79       4720    Rural                      San Carlos Reservation
+06035040100      northern-ca          204              59                   176       1627    Rural                                         NaN
+
+high-wildfire tracts: 2,345, people 9,640,717; ways out hidden from the escape-route layer 19,179 of 106,887

@@ -1,0 +1,7 @@
+data/
+cache/
+submissions/
+.env
+.venv/
+__pycache__/
+.DS_Store

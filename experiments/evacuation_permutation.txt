@@ -1,0 +1,8 @@
+tribal_any missing_exits_overture         shuffled within region: gap +0.081  (97.5% of shuffles below +0.058)  p = 0.0002
+tribal_any missing_exits_overture         shuffled within county: gap +0.081  (97.5% of shuffles below +0.077)  p = 0.0002
+tribal_any missing_exits_overture_track   shuffled within region: gap +0.057  (97.5% of shuffles below +0.055)  p = 0.0020
+tribal_any missing_exits_overture_track   shuffled within county: gap +0.057  (97.5% of shuffles below +0.061)  p = 0.8498
+rural      missing_exits_overture         shuffled within region: gap +0.150  (97.5% of shuffles below +0.014)  p = 0.0002
+rural      missing_exits_overture         shuffled within county: gap +0.150  (97.5% of shuffles below +0.105)  p = 0.0002
+rural      missing_exits_overture_track   shuffled within region: gap +0.053  (97.5% of shuffles below +0.012)  p = 0.0002
+rural      missing_exits_overture_track   shuffled within county: gap +0.053  (97.5% of shuffles below +0.049)  p = 0.0002
